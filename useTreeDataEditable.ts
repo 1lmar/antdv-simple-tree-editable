@@ -1,21 +1,26 @@
 import { computed, ref, Ref, unref } from 'vue'
-import { TreeDataItem } from '../views/administration/roles/access-rights/tree/types'
 
-export interface TreeItemProps<T> {
+interface TreeItemProps<T> {
   TITLE: string
   VALUE: T
   CHILDS: TreeItemProps<T>[]
 }
 
-export interface TreeItem<T> extends Omit<TreeItemProps<T>, 'CHILDS'> {
+interface TreeItem<T> extends Omit<TreeItemProps<T>, 'CHILDS'> {
   KEY: string
   CHILDS: TreeItem<T>[]
 }
 
+type TreeDataItem<T> = {
+  VALUE: T | null
+  title: string
+  key: string
+  children: TreeDataItem<T>[]
+  slots?: object
+}
+
 /**
- * хук для управление компонентом дерева ant-design
- * включает в себя: поиск, добавление, редактирование, удаление
- * также св-во VALUE для передачи своих значении
+ * Composition API to edit ant-design tree
  */
 export function useTreeDataEditable<T>() {
   const treeData = ref<TreeItem<T>[]>([]) as Ref<TreeItem<T>[]>
@@ -59,7 +64,7 @@ export function useTreeDataEditable<T>() {
     })
   }
 
-  function createNodeChild(KEY: string, PROPS: TreeItemProps<T>) {
+  function createNodeChild(KEY: string, PROPS: Omit<TreeItemProps<T>, 'CHILDS'>) {
     const treeItem = getNode(KEY, treeData.value)
     treeItem.CHILDS.push({
       KEY: `${treeItem.KEY}-${treeItem.CHILDS.length}`,
@@ -69,7 +74,7 @@ export function useTreeDataEditable<T>() {
     })
   }
 
-  function createParentNode(PROPS: TreeItemProps<T>) {
+  function createParentNode(PROPS: Omit<TreeItemProps<T>, 'CHILDS'>) {
     return treeData.value.push({
       KEY: `0-${treeData.value.length}`,
       ...PROPS,
