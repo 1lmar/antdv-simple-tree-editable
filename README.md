@@ -1,7 +1,7 @@
 # Ant Design Vue simple tree data editable
 A simple antdv tree editable composition API example
 
-```
+```html
 <script setup lang="ts">
 const { getTreeData, createNodes, ... } = useTreeDataEditable()
 createNodes([
@@ -12,6 +12,7 @@ createNodes([
   },
 ])
 </script>
+
 <template>
   <a-tree :tree-data="getTreeData">
     <template #VALUE="{ title, dataRef }">
