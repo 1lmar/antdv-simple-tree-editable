@@ -160,7 +160,6 @@ export function useTreeDataEditable<T>() {
       children: item.CHILDS
         ? item.CHILDS.map((child) => convertTreeData(child))
         : [],
-      slots: { title: 'VALUE' },
     }
   }
 
